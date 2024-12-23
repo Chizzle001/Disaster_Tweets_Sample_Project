@@ -89,7 +89,7 @@ The performance of each model is visualized using confusion matrices, which are 
 
 ## Usage
 
-To use the trained **Random Forest** model to make predictions on new tweets, you can use the following approach:
+To use the trained **Random Forest** model to make predictions on new tweets, use the following approach:
 
 1. Preprocess the text data as described in the preprocessing section.
 2. Transform the new text data into TF-IDF features using the same `TfidfVectorizer` used for training.
