@@ -1,37 +1,99 @@
 # Disaster Tweet Classification
 
-This project is focused on classifying tweets into two categories: Disaster and Non-Disaster. The goal is to predict whether a tweet is related to a real disaster event based on its content.
+This project aims to classify tweets into two categories: Disaster and Non-Disaster. The classification is based on the content of the tweets, where the goal is to predict whether a tweet is related to a real disaster event or not.
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Installation](#installation)
 - [Dataset](#dataset)
 - [Preprocessing](#preprocessing)
 - [Models](#models)
 - [Results](#results)
 - [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
 
-## Overview
+## Dataset
 
-This project uses natural language processing (NLP) techniques to classify tweets. The classification process involves the following key steps:
+The dataset used in this project consists of two CSV files:
 
-1. **Text Cleaning**: Removing URLs, mentions, hashtags, and special characters.
-2. **Text Preprocessing**: Tokenizing, stemming, and lemmatizing the text.
-3. **Feature Extraction**: Using TF-IDF and N-grams (unigrams, bigrams, trigrams) for feature extraction.
-4. **Class Imbalance Handling**: Resampling the minority class using upsampling.
-5. **Modeling**: Training models such as Logistic Regression, Support Vector Classifier (SVC), and Random Forest Classifier.
-6. **Model Evaluation**: Evaluating the models using accuracy, confusion matrix, and classification report.
-7. **Prediction**: Predicting whether new tweets are related to a disaster or not.
+- **train.csv**: Contains the training data with tweet text and corresponding target labels.
+- **test.csv**: Contains the test data with tweet text.
 
-## Installation
+Each row in the dataset contains:
 
-To set up this project, you need Python and several libraries. Follow the instructions below to install the required dependencies.
+- **text**: The tweet text.
+- **target**: The label, where:
+  - `1` indicates a disaster tweet.
+  - `0` indicates a non-disaster tweet.
 
-1. Clone the repository:
+### Sample Data (train.csv):
 
-   ```bash
-   git clone https://github.com/yourusername/disaster-tweet-classification.git
-   cd disaster-tweet-classification
+| text                                         | target |
+|----------------------------------------------|--------|
+| Just saw a car crash! It's terrible.         | 1      |
+| Happy birthday to my friend!                | 0      |
+| Massive earthquake hits the city.            | 1      |
+| The sun is shining, it's a beautiful day!    | 0      |
+
+## Preprocessing
+
+Before training the models, several preprocessing steps are applied to the data:
+
+1. **Text Cleaning**:
+   - Removing URLs, mentions, hashtags, and non-alphabetical characters.
+   - Converting the text to lowercase.
+   
+2. **Text Tokenization**:
+   - Splitting the text into words (tokens) using word tokenization.
+
+3. **Stemming & Lemmatization**:
+   - Reducing words to their root form using the `PorterStemmer` and `WordNetLemmatizer`.
+
+4. **Stopword Removal**:
+   - Filtering out common words like "the", "is", "and", etc., which do not add significant meaning to the text.
+
+## Models
+
+We evaluate multiple machine learning models for the classification task:
+
+### 1. Logistic Regression
+Logistic Regression is a commonly used binary classifier. It is trained using the **TF-IDF** features extracted from the text data. This model is simple and interpretable.
+
+### 2. Support Vector Classifier (SVC)
+The **Support Vector Classifier (SVC)** with a linear kernel is used for text classification. It is particularly effective for high-dimensional spaces such as text data.
+
+### 3. Random Forest Classifier
+A **Random Forest classifier** is trained using the resampled data. This ensemble method combines multiple decision trees to improve classification accuracy and reduce overfitting.
+
+## Results
+
+Each model is evaluated on the test data using the following metrics:
+
+- **Accuracy**: The percentage of correct predictions made by the model.
+- **Confusion Matrix**: A matrix showing true positives, false positives, true negatives, and false negatives.
+- **Classification Report**: Includes precision, recall, and F1-score for each class (disaster and non-disaster).
+
+The performance of each model is visualized using confusion matrices, which are plotted using `matplotlib` and `seaborn`.
+
+### Example Model Performance:
+- **Accuracy**: 80%
+- **Confusion Matrix**:
+    ```
+    [[500, 100]
+     [ 50, 350]]
+    ```
+- **Classification Report**:
+    ```
+    Precision: 0.78
+    Recall: 0.82
+    F1-score: 0.80
+    ```
+
+## Usage
+
+To use the trained **Random Forest** model to make predictions on new tweets, you can use the following approach:
+
+1. Preprocess the text data as described in the preprocessing section.
+2. Transform the new text data into TF-IDF features using the same `TfidfVectorizer` used for training.
+3. Use the trained model to predict the disaster or non-disaster category for each tweet.
+
+This will output the prediction for each tweet, indicating whether it's related to a real disaster or not.
+
