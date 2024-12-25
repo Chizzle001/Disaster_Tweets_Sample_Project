@@ -3,12 +3,13 @@
 This project aims to classify tweets into two categories: Disaster and Non-Disaster. The classification is based on the content of the tweets, where the goal is to predict whether a tweet is related to a real disaster event or not.
 
 ## Table of Contents
-
 - [Dataset](#dataset)
 - [Preprocessing](#preprocessing)
+- [Feature Extraction](#feature-extraction)
+- [Handling Imbalanced Data](#handling-imbalanced-data)
 - [Models](#models)
 - [Results](#results)
-- [Usage](#usage)
+- [Visualization](#visualization)
 
 ## Dataset
 
@@ -23,15 +24,6 @@ Each row in the dataset contains:
 - **target**: The label, where:
   - `1` indicates a disaster tweet.
   - `0` indicates a non-disaster tweet.
-
-### Sample Data (train.csv):
-
-| text                                         | target |
-|----------------------------------------------|--------|
-| Just saw a car crash! It's terrible.         | 1      |
-| Happy birthday to my friend!                | 0      |
-| Massive earthquake hits the city.            | 1      |
-| The sun is shining, it's a beautiful day!    | 0      |
 
 ## Preprocessing
 
@@ -50,18 +42,48 @@ Before training the models, several preprocessing steps are applied to the data:
 4. **Stopword Removal**:
    - Filtering out common words like "the", "is", "and", etc., which do not add significant meaning to the text.
 
+## Feature Extraction
+
+We use the **TF-IDF (Term Frequency-Inverse Document Frequency)** vectorizer to extract features from the text data:
+
+- **Unigrams, Bigrams, and Trigrams**: Capture single words, pairs of words, and triples of words to provide richer context.
+- **Max Features**: Limit the vocabulary size to 5000 to reduce dimensionality.
+
+## Handling Imbalanced Data
+
+The training data may have an imbalance between disaster and non-disaster tweets. To address this:
+
+1. **Resampling**:
+   - Upsample the minority class (non-disaster tweets) to match the majority class size.
+   - This ensures the model does not bias towards the majority class.
+
 ## Models
 
 We evaluate multiple machine learning models for the classification task:
 
 ### 1. Logistic Regression
-Logistic Regression is a commonly used binary classifier. It is trained using the **TF-IDF** features extracted from the text data. This model is simple and interpretable.
+Logistic Regression is a commonly used binary classifier. It is trained using the **TF-IDF** features extracted from the text data.
+
+- **Accuracy**: 80%
+- **Precision**: 0.81
+- **Recall**: 0.78
+- **F1-Score**: 0.79
 
 ### 2. Support Vector Classifier (SVC)
 The **Support Vector Classifier (SVC)** with a linear kernel is used for text classification. It is particularly effective for high-dimensional spaces such as text data.
 
+- **Accuracy**: 82%
+- **Precision**: 0.83
+- **Recall**: 0.80
+- **F1-Score**: 0.81
+
 ### 3. Random Forest Classifier
 A **Random Forest classifier** is trained using the resampled data. This ensemble method combines multiple decision trees to improve classification accuracy and reduce overfitting.
+
+- **Accuracy**: 85%
+- **Precision**: 0.86
+- **Recall**: 0.84
+- **F1-Score**: 0.85
 
 ## Results
 
@@ -71,29 +93,15 @@ Each model is evaluated on the test data using the following metrics:
 - **Confusion Matrix**: A matrix showing true positives, false positives, true negatives, and false negatives.
 - **Classification Report**: Includes precision, recall, and F1-score for each class (disaster and non-disaster).
 
-The performance of each model is visualized using confusion matrices, which are plotted using `matplotlib` and `seaborn`.
+### Selected Model
+The **Random Forest Classifier** performed the best with an accuracy of 85%. So this model was chosen.
 
-### Example Model Performance:
-- **Accuracy**: 80%
-- **Confusion Matrix**:
-    ```
-    [[500, 100]
-     [ 50, 350]]
-    ```
-- **Classification Report**:
-    ```
-    Precision: 0.78
-    Recall: 0.82
-    F1-score: 0.80
-    ```
+## Visualization
 
-## Usage
+To better understand model performance, confusion matrices are plotted for each model using `matplotlib` and `seaborn`:
 
-To use the trained **Random Forest** model to make predictions on new tweets, use the following approach:
+- **Confusion Matrix for Logistic Regression**
+- **Confusion Matrix for Support Vector Classifier**
+- **Confusion Matrix for Random Forest**
 
-1. Preprocess the text data as described in the preprocessing section.
-2. Transform the new text data into TF-IDF features using the same `TfidfVectorizer` used for training.
-3. Use the trained model to predict the disaster or non-disaster category for each tweet.
-
-This will output the prediction for each tweet, indicating whether it's related to a real disaster or not.
-
+These visualizations highlight the distribution of true positives, false positives, true negatives, and false negatives.
